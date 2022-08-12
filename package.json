@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@types/js-yaml": "4.0.5",
-    "@types/node": "16.11.47",
+    "@types/node": "16.11.48",
     "@typescript-eslint/eslint-plugin": "5.33.0",
     "@typescript-eslint/parser": "5.33.0",
     "discord.js": "13.10.2",
