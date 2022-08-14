@@ -43,11 +43,18 @@ export async function getSourceUserRoles(client: Client): Promise<RoleUsers> {
   return roleUsers
 }
 
+/**
+ * ロールを適用する
+ *
+ * @param client Client
+ * @param roleUsers RoleUsers
+ */
 export async function applyRole(client: Client, roleUsers: RoleUsers) {
   console.log('applyRole()')
   const config = getConfig()
   const destGuilds = config.destGuilds
 
+  // 対象Guildすべてに対して適用
   for (const guildConfig of destGuilds) {
     const guildId = guildConfig.guildId
     console.log(`applyRole(): Fetching guild ${guildId}`)
