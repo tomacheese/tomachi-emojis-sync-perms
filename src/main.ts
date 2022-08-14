@@ -19,10 +19,7 @@ client.on('ready', async () => {
   console.log(`ready: ${client.user?.tag}`)
 
   await syncRole()
-
-  setInterval(() => {
-    syncRole()
-  }, 10 * 60 * 1000) // 10分おきに同期
+  client.destroy()
 })
 
 client
