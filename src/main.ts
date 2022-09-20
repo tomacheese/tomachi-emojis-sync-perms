@@ -1,8 +1,8 @@
-import { Client, Intents } from 'discord.js'
+import { Client } from 'discord.js'
 import { applyRole, getConfig, getSourceUserRoles } from './utlis'
 
 const client = new Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS],
+  intents: ['Guilds', 'GuildMembers'],
 })
 
 export function getClient() {
