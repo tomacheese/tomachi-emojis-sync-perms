@@ -2,10 +2,8 @@
 
 while :
 do
-  yarn build || true
+  pnpm start || true
 
-  echo "Waiting..."
-
-  # wait 10 minutes
-  sleep 600
+  echo "Restart after 5 seconds"
+  sleep 5
 done

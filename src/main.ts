@@ -1,27 +1,49 @@
-import { Client } from 'discord.js'
-import { applyRole, getConfig, getSourceUserRoles } from './utlis'
+import { Logger } from '@book000/node-utils'
+import { Configuration } from './config'
+import { Discord } from './discord'
 
-const client = new Client({
-  intents: ['Guilds', 'GuildMembers'],
-})
+async function main() {
+  const logger = Logger.configure('main')
+  const config = new Configuration('data/config.json')
+  config.load()
+  if (!config.validate()) {
+    logger.error('❌ Configuration is invalid')
+    logger.error(
+      `💡 Missing check(s): ${config.getValidateFailures().join(', ')}`
+    )
+    return
+  }
 
-export function getClient() {
-  return client
+  logger.info('🤖 Starting tomachi-emojis-sync-perms')
+
+  const discord = new Discord(config)
+  process.once('SIGINT', () => {
+    logger.info('👋 SIGINT signal received.')
+    discord
+      .close()
+      .then(() => {
+        logger.info('🤖 Stopped tomachi-emojis-sync-perms')
+        process.exit(0)
+      })
+      .catch((error) => {
+        logger.error('Error', error as Error)
+        process.exit(1)
+      })
+  })
+
+  // uncaughtExceptionの場合にも終了処理を行う
+  process.once('uncaughtException', (error) => {
+    logger.error('Error', error as Error)
+    process.exit(1)
+  })
 }
 
-async function syncRole() {
-  console.log('syncRole()')
-  const roleUsers = await getSourceUserRoles(client)
-  await applyRole(client, roleUsers)
-}
-
-client.on('ready', async () => {
-  console.log(`ready: ${client.user?.tag}`)
-
-  await syncRole()
-  client.destroy()
-})
-
-client
-  .login(getConfig().discordToken)
-  .then(() => console.log('Login Successful.'))
+;(async () => {
+  try {
+    await main()
+  } catch (error) {
+    Logger.configure('main').error('Error', error as Error)
+    // eslint-disable-next-line unicorn/no-process-exit
+    process.exit(1)
+  }
+})()
