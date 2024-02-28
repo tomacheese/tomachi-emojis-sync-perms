@@ -29,7 +29,7 @@
     "fix": "run-z fix:prettier,fix:eslint"
   },
   "devDependencies": {
-    "@book000/node-utils": "1.12.73",
+    "@book000/node-utils": "1.12.74",
     "@types/js-yaml": "4.0.9",
     "@types/node": "20.11.21",
     "@typescript-eslint/eslint-plugin": "7.1.0",
