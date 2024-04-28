@@ -4,7 +4,7 @@ import { Configuration } from './config'
 import { Linking } from './linking'
 import { setInterval } from 'node:timers/promises'
 
-export type RoleUsers = { [key: string]: string[] }
+export type RoleUsers = Record<string, string[] | undefined>
 
 export class Discord {
   private config: Configuration
@@ -24,8 +24,8 @@ export class Discord {
 
     this.config = config
 
-    this.client.login(config.get('discord').token).catch((error) => {
-      Logger.configure('Discord.constructor').error('Error', error)
+    this.client.login(config.get('discord').token).catch((error: unknown) => {
+      Logger.configure('Discord.constructor').error('Error', error as Error)
     })
   }
 
@@ -53,8 +53,8 @@ export class Discord {
           continue
         }
         logger.info(`✨ Member ${member.user.tag} has role ${role.type}`)
-        if (role.type in roleUsers) {
-          roleUsers[role.type].push(member.id)
+        if (role.type in roleUsers && roleUsers[role.type]) {
+          roleUsers[role.type]?.push(member.id)
         } else {
           roleUsers[role.type] = [member.id]
         }
@@ -90,7 +90,7 @@ export class Discord {
             continue
           }
           if (
-            roleUsers[roleConfig.type].includes(member.id) &&
+            roleUsers[roleConfig.type]?.includes(member.id) &&
             !member.roles.cache.has(roleConfig.roleId)
           ) {
             logger.info(
@@ -99,7 +99,7 @@ export class Discord {
             await member.roles.add(roleConfig.roleId)
           }
           if (
-            !roleUsers[roleConfig.type].includes(member.id) &&
+            !roleUsers[roleConfig.type]?.includes(member.id) &&
             member.roles.cache.has(roleConfig.roleId)
           ) {
             logger.info(
@@ -140,7 +140,7 @@ export class Discord {
     const logger = Logger.configure('Discord.sync')
     logger.info('🔄 Syncing roles')
 
-    const linkPath = process.env.LINKING_PATH || 'data/linking.yml'
+    const linkPath = process.env.LINKING_PATH ?? 'data/linking.yml'
     const linking = new Linking(linkPath)
     const roleUsers = await this.getSourceUserRoles(linking)
     await this.applyRole(linking, roleUsers)

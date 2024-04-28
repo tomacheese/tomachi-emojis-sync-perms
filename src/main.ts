@@ -2,7 +2,7 @@ import { Logger } from '@book000/node-utils'
 import { Configuration } from './config'
 import { Discord } from './discord'
 
-async function main() {
+function main() {
   const logger = Logger.configure('main')
   const config = new Configuration('data/config.json')
   config.load()
@@ -25,7 +25,7 @@ async function main() {
         logger.info('🤖 Stopped tomachi-emojis-sync-perms')
         process.exit(0)
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         logger.error('Error', error as Error)
         process.exit(1)
       })
@@ -33,17 +33,9 @@ async function main() {
 
   // uncaughtExceptionの場合にも終了処理を行う
   process.once('uncaughtException', (error) => {
-    logger.error('Error', error as Error)
+    logger.error('Error', error)
     process.exit(1)
   })
 }
 
-;(async () => {
-  try {
-    await main()
-  } catch (error) {
-    Logger.configure('main').error('Error', error as Error)
-    // eslint-disable-next-line unicorn/no-process-exit
-    process.exit(1)
-  }
-})()
+main()

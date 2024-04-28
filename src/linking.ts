@@ -67,9 +67,7 @@ export class Linking {
    * @returns バリデーション結果
    */
   private validate(data: unknown): data is ILinking {
-    const validates: {
-      [key: string]: (data: unknown) => boolean
-    } = {
+    const validates: Record<string, (data: unknown) => boolean> = {
       'data is object': (data: unknown) => {
         return typeof data === 'object' && data !== null
       },
