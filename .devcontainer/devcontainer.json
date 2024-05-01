@@ -4,7 +4,7 @@
   "otherPortAttributes": {
     "onAutoForward": "silent"
   },
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-18",
   "name": "tomachi-emojis-sync-perms",
   "customizations": {
     "extensions": [
