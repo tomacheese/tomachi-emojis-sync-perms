@@ -11,6 +11,7 @@ export class Discord {
   public readonly client: Client
 
   constructor(config: Configuration) {
+    const logger = Logger.configure('Discord.constructor')
     this.client = new Client({
       intents: [
         GatewayIntentBits.Guilds,
@@ -20,12 +21,16 @@ export class Discord {
       ],
       partials: [Partials.Message, Partials.Channel, Partials.User],
     })
-    this.client.on('ready', this.onReady.bind(this))
+    this.client.on('ready', () => {
+      this.onReady().catch((error: unknown) => {
+        logger.error('Error', error as Error)
+      })
+    })
 
     this.config = config
 
     this.client.login(config.get('discord').token).catch((error: unknown) => {
-      Logger.configure('Discord.constructor').error('Error', error as Error)
+      logger.error('Error', error as Error)
     })
   }
 
