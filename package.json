@@ -34,7 +34,7 @@
     "@types/js-yaml": "4.0.9",
     "@types/node": "20.16.6",
     "discord.js": "14.16.2",
-    "eslint": "9.11.0",
+    "eslint": "9.11.1",
     "eslint-config-standard": "17.1.0",
     "eslint-plugin-import": "2.30.0",
     "eslint-plugin-n": "17.10.3",
