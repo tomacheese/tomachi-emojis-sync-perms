@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@book000/eslint-config": "1.9.26",
-    "@book000/node-utils": "1.18.65",
+    "@book000/node-utils": "1.18.67",
     "@types/jest": "30.0.0",
     "@types/js-yaml": "4.0.9",
     "@types/node": "22.16.3",
