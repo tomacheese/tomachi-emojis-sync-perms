@@ -31,32 +31,36 @@ pnpm install
 
 ## 設定
 
-`data/config.json` を作成し、Discord Bot の設定とサーバー情報を記載します。
+設定は 2 つのファイルに分かれています。
+
+### data/config.json
+
+Discord Bot のトークンを設定します。
 
 ```json
 {
   "discord": {
     "token": "your-discord-bot-token"
-  },
-  "linkings": [
-    {
-      "source": {
-        "guildId": "source-server-id",
-        "roles": [
-          { "type": "admin", "roleId": "role-id" }
-        ]
-      },
-      "destinations": [
-        {
-          "guildId": "destination-server-id",
-          "roles": [
-            { "type": "admin", "roleId": "role-id" }
-          ]
-        }
-      ]
-    }
-  ]
+  }
 }
+```
+
+### data/linking.yml
+
+サーバー間のロール同期設定を YAML 形式で記載します。
+
+```yaml
+sourceGuild:
+  guildId: "source-server-id"
+  roles:
+    - type: "admin"
+      roleId: "role-id"
+
+destGuilds:
+  - guildId: "destination-server-id"
+    roles:
+      - type: "admin"
+        roleId: "role-id"
 ```
 
 ## 使用方法
@@ -71,6 +75,34 @@ pnpm dev
 
 ## Docker での実行
 
+Docker で実行する場合は、設定ファイルをコンテナにマウントする必要があります。
+
+1. `data/config.json` と `data/linking.yml` を作成します
+2. `compose.yaml` でボリュームマッピングを設定します
+
+```yaml
+services:
+  app:
+    build: .
+    volumes:
+      - type: bind
+        source: ./data/config.json
+        target: /data/config.json
+      - type: bind
+        source: ./data/linking.yml
+        target: /data/linking.yml
+    init: true
+```
+
+3. コンテナを起動します
+
 ```bash
 docker compose up -d
 ```
+
+### 環境変数
+
+設定ファイルのパスは環境変数でカスタマイズできます:
+
+- `CONFIG_PATH`: 設定ファイルのパス（デフォルト: `/data/config.json`）
+- `LINKING_PATH`: リンク設定ファイルのパス（デフォルト: `/data/linking.yml`）
