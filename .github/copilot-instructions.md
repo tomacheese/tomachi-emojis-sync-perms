@@ -41,3 +41,4 @@ pnpm install
 ## ドキュメント更新
 
 ## リポジトリ固有
+- 目的: 🔑 Tomachi Emojis Discord サーバー間でロール（権限）を同期するツールです。
