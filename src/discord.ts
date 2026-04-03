@@ -22,15 +22,15 @@ export class Discord {
       partials: [Partials.Message, Partials.Channel, Partials.User],
     })
     this.client.on('ready', () => {
-      this.onReady().catch((error: unknown) => {
-        logger.error('Error', error as Error)
+      this.onReady().catch((err: unknown) => {
+        logger.error('Error', err as Error)
       })
     })
 
     this.config = config
 
-    this.client.login(config.get('discord').token).catch((error: unknown) => {
-      logger.error('Error', error as Error)
+    this.client.login(config.get('discord').token).catch((err: unknown) => {
+      logger.error('Error', err as Error)
     })
   }
 

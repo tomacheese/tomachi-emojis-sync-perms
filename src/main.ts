@@ -25,8 +25,8 @@ function main() {
         logger.info('🤖 Stopped tomachi-emojis-sync-perms')
         process.exit(0)
       })
-      .catch((error: unknown) => {
-        logger.error('Error', error as Error)
+      .catch((err: unknown) => {
+        logger.error('Error', err as Error)
         process.exit(1)
       })
   })
