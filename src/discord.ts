@@ -58,7 +58,7 @@ export class Discord {
           continue
         }
         logger.info(`✨ Member ${member.user.tag} has role ${role.type}`)
-        if (role.type in roleUsers && roleUsers[role.type]) {
+        if (Object.hasOwn(roleUsers, role.type)) {
           roleUsers[role.type]?.push(member.id)
         } else {
           roleUsers[role.type] = [member.id]
@@ -91,7 +91,7 @@ export class Discord {
           logger.info(
             `🔄 Processing member: ${member.user.tag} <- ${roleConfig.type}`
           )
-          if (!roleUsers[roleConfig.type]) {
+          if (!Object.hasOwn(roleUsers, roleConfig.type)) {
             continue
           }
           if (
@@ -135,8 +135,9 @@ export class Discord {
 
     // 10分ごとにロールを同期
     await this.sync()
+    const syncInterval = setInterval(10 * 60 * 1000)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for await (const _ of setInterval(10 * 60 * 1000)) {
+    for await (const _ of syncInterval) {
       await this.sync()
     }
   }
