@@ -104,14 +104,15 @@ export class Discord {
             await member.roles.add(roleConfig.roleId)
           }
           if (
-            !roleUsers[roleConfig.type]?.includes(member.id) &&
-            member.roles.cache.has(roleConfig.roleId)
+            roleUsers[roleConfig.type]?.includes(member.id) ||
+            !member.roles.cache.has(roleConfig.roleId)
           ) {
-            logger.info(
-              `🚫 ${member.user.tag} take ${roleConfig.type} in ${guild.name}`
-            )
-            await member.roles.remove(roleConfig.roleId)
+            continue
           }
+          logger.info(
+            `🚫 ${member.user.tag} take ${roleConfig.type} in ${guild.name}`
+          )
+          await member.roles.remove(roleConfig.roleId)
         }
       }
     }
