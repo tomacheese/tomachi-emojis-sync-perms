@@ -170,8 +170,8 @@ importers:
         specifier: 1.16.102
         version: 1.16.102(eslint@10.13.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@book000/node-utils':
-        specifier: 1.25.168
-        version: 1.25.168(@babel/core@7.29.7(supports-color@8.1.1))
+        specifier: 1.25.170
+        version: 1.25.170(@babel/core@7.29.7(supports-color@8.1.1))
       '@types/jest':
         specifier: 30.0.0
         version: 30.0.0
@@ -396,8 +396,8 @@ packages:
     peerDependencies:
       eslint: 10.13.0
 
-  '@book000/node-utils@1.25.168':
-    resolution: {integrity: sha512-eoSB4g0Ta+U4Uan8y5Y6hHhAHhjz1/XsToNmg/Aotff+lkMUgM7MTwF2NdFm4FjKqZcSFx1bUvjvMmbnJLahxQ==}
+  '@book000/node-utils@1.25.170':
+    resolution: {integrity: sha512-8DbZ3gi/WDf2Z/TZLiQubuqhPkXC1Zpd9Fjv8d8qHOJ1wIgIlD43Mco2Cbj5h8uv6WOoY1Je1dXTWt5FBTmaGA==}
 
   '@cacheable/memory@2.2.0':
     resolution: {integrity: sha512-CTLKqLItRCEixEAewD3/j9DB3/o96gpTPD4eJ1v+DGOlxZRZncRQkGYqqnAGCscYd6RNeXfGeiuCphsPtqyIfQ==}
@@ -3634,7 +3634,7 @@ snapshots:
       - ts-declaration-location
       - typescript
 
-  '@book000/node-utils@1.25.168(@babel/core@7.29.7(supports-color@8.1.1))':
+  '@book000/node-utils@1.25.170(@babel/core@7.29.7(supports-color@8.1.1))':
     dependencies:
       '@sentry/node': 11.8.0(@babel/core@7.29.7(supports-color@8.1.1))
       cycle: 1.0.3
