@@ -4,3 +4,5 @@ allowBuilds:
   '@parcel/watcher': true
 minimumReleaseAgeExclude:
   - '@book000/*'
+overrides:
+  '@sapphire/shapeshift': ^5
