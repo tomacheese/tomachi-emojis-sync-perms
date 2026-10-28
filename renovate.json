@@ -1,3 +1,10 @@
 {
-  "extends": ["github>book000/templates//renovate/base-public"]
+  "extends": ["github>book000/templates//renovate/base-public"],
+  "packageRules": [
+    {
+      "description": "Keep @types/node aligned with the runtime Node 24 (Dockerfile node:24-alpine, .node-version). @types/node 26 breaks @sapphire/shapeshift@4 types (TS2305 InspectOptionsStylized) and shapeshift 5 requires node>=26. Lift this rule when the runtime moves to Node 26.",
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "<25"
+    }
+  ]
 }
