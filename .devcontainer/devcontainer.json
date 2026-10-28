@@ -1,6 +1,6 @@
 {
   "name": "tomachi-emojis-sync-perms",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:24",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:26",
   "remoteUser": "node",
   "otherPortsAttributes": {
     "onAutoForward": "silent"
