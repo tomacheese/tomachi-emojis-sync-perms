@@ -1,28 +1,17 @@
 # GitHub Copilot Instructions
 
-GitHub Copilot のコードレビュー向け指示。このリポジトリの PR をレビューする際の観点を示す。
-
-## プロジェクト概要
-- 目的: Discord サーバー間でのロール（権限）同期（Tomachi Emojis 用）。
-- 動作: ソースサーバーのメンバーのロール保持状況を取得し、複数の宛先サーバーへ同期する。`Discord.onReady` で起動後、10 分間隔で `sync()` を実行する。
-- 技術スタック: TypeScript / discord.js v14 / pnpm / `@book000/node-utils`（`ConfigFramework`・`Logger`）。
+プロジェクト概要、開発コマンド、規約は [AGENTS.md](../AGENTS.md) を参照する。ここではレビュー時の重点だけを示す。
 
 ## レビュー時の重点確認点
-- **ログ／エラーメッセージ**: 既存コードは絵文字プレフィックス付きの英語メッセージ（例: `❌ Configuration is invalid`、`🔄 Syncing roles`）で統一されている。新規メッセージも同じ形式・英語であることを確認する。
-- **ロール付与／剥奪ロジック**（`src/discord.ts` の `applyRole`）: 付与・剥奪の条件分岐（`roles.cache.has` による現状チェック）が正しく、不要な API 呼び出しや取り違えがないか確認する。
-- **Discord API 呼び出し**: `guild.members.fetch()` は全メンバーを取得する。大規模ギルドでの負荷やエラーハンドリング（`catch` 漏れ）に注意する。
-- **設定バリデーション**: `src/linking.ts` の `validate` と `src/config.ts` の `validates()` が設定構造の前提を担保している。設定形式を変更する場合、これらの更新漏れがないか確認する。
-- **型安全性**: `skipLibCheck` などによる型チェック回避を導入していないか確認する。
 
-## セキュリティ
-- Discord トークンは `data/config.json` で管理する。トークン等の機密情報を Git にコミットしていないか、ログへ出力していないか確認する。
+- ログ / エラーメッセージは英語で、既存の絵文字プレフィックス形式に揃っているか。
+- `src/discord.ts` の `applyRole` で、付与 / 剥奪の条件分岐 (`roles.cache.has`) が正しく、不要な API 呼び出しがないか。
+- `guild.members.fetch()` は全メンバーを取得する。大規模ギルドでの負荷と、`catch` 漏れがないか。
+- 設定形式を変える場合、`src/linking.ts` の `validate`、`src/config.ts` の `validates()`、README の更新漏れがないか。
+- `skipLibCheck` などによる型チェック回避を導入していないか。
+- Discord トークンなどの機密情報をコミットしていないか、ログへ出力していないか。
 
-## コーディング規約（lint/formatter で強制）
-- フォーマット: Prettier（`pnpm lint:prettier`）。
-- Lint: ESLint（`@book000/eslint-config`、`pnpm lint:eslint`）。
-- コメント・JSDoc は日本語。エラーメッセージは英語。
+## 指摘不要なもの
 
-## フラグすべきでない既知パターン（誤検知回避）
-- ログ／エラーメッセージ内の絵文字は意図的な統一表現であり、指摘不要。
-- 日本語のコメント・JSDoc はプロジェクト標準であり、英語化を提案しない。
-- 会話・コミットの `<description>` は日本語が規約。英語化を提案しない。
+- ログ / エラーメッセージ内の絵文字は意図した統一表現。
+- 日本語のコメント、JSDoc、コミットの description は規約どおり。英語化を提案しない。
