@@ -10,13 +10,14 @@
 
 - ソースサーバーからロール情報を取得
 - 複数の宛先サーバーにロールを同期
-- 定期的な自動同期
+- 起動直後と、その後 10 分ごとの自動同期
+- ソース側にそのロールを持つメンバーが 1 人以上いる場合、ソース側でロールを失った宛先サーバーのメンバーからはロールを剥奪（ソース側の保持者が 0 人になったロール種別は処理がスキップされ、剥奪されない）
 
 ## 必要要件
 
 - Node.js（`.node-version` 参照）
 - pnpm
-- Discord Bot Token（適切な権限が必要）
+- Discord Bot Token（ロールの管理権限と、Server Members Intent・Message Content Intent の有効化が必要）
 
 ## インストール
 
@@ -75,7 +76,7 @@ pnpm dev
 
 ## Docker での実行
 
-Docker で実行する場合は、設定ファイルをコンテナにマウントする必要があります。
+イメージ内の作業ディレクトリは `/app` で、`data/config.json` は `/app/data/config.json` から読み込まれます。`data/linking.yml` は環境変数 `LINKING_PATH` (イメージ内の既定値: `/data/linking.yml`) のパスから読み込まれます。
 
 1. `data/config.json` と `data/linking.yml` を作成します
 2. `compose.yaml` でボリュームマッピングを設定します
@@ -87,7 +88,7 @@ services:
     volumes:
       - type: bind
         source: ./data/config.json
-        target: /data/config.json
+        target: /app/data/config.json
       - type: bind
         source: ./data/linking.yml
         target: /data/linking.yml
@@ -102,7 +103,6 @@ docker compose up -d
 
 ### 環境変数
 
-設定ファイルのパスは環境変数でカスタマイズできます:
+- `LINKING_PATH`: リンク設定ファイルのパス (デフォルト: `data/linking.yml`、Docker イメージでは `/data/linking.yml`)
 
-- `CONFIG_PATH`: 設定ファイルのパス（デフォルト: `/data/config.json`）
-- `LINKING_PATH`: リンク設定ファイルのパス（デフォルト: `/data/linking.yml`）
+`data/config.json` のパスは環境変数では変更できません。
