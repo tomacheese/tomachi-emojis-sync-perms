@@ -173,8 +173,8 @@ importers:
         specifier: 1.16.113
         version: 1.16.113(eslint@10.14.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@book000/node-utils':
-        specifier: 1.26.0
-        version: 1.26.0
+        specifier: 1.26.1
+        version: 1.26.1
       '@types/jest':
         specifier: 30.0.0
         version: 30.0.0
@@ -399,8 +399,8 @@ packages:
     peerDependencies:
       eslint: 10.14.0
 
-  '@book000/node-utils@1.26.0':
-    resolution: {integrity: sha512-OHPFi9FrDpJnfwFNzYzOLLsjeyA4pS4+RVkE5CuBTUjInztNR4gBqJV2i2QMVXIpnkqObs4b2UbuN08oStDVeA==}
+  '@book000/node-utils@1.26.1':
+    resolution: {integrity: sha512-cNMqjwyGWqvCIHi425xpVPFikNw1E7T80UP5Ne5J88Iw/DGU1lPB+tPJqnZQrPWxTSuFf7Dru4gig65suyUt1A==}
 
   '@cacheable/memory@2.2.0':
     resolution: {integrity: sha512-CTLKqLItRCEixEAewD3/j9DB3/o96gpTPD4eJ1v+DGOlxZRZncRQkGYqqnAGCscYd6RNeXfGeiuCphsPtqyIfQ==}
@@ -1681,6 +1681,7 @@ packages:
   discord.js@14.28.0:
     resolution: {integrity: sha512-l/mIllvqvWQDWqa8NPw7b2AU2tM9oPWiWR6Jk54DTNlUdyArXbi+Y0m0sLIUtQ9O0x+tyVpDMCG6K6Kf0yeAWQ==}
     engines: {node: '>=18'}
+    deprecated: Please upgrade to 14.28.1 or newer as those versions solve a potential security issue related to the new permission fields on channels
 
   doctrine@2.1.0:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
@@ -3568,7 +3569,7 @@ snapshots:
       - ts-declaration-location
       - typescript
 
-  '@book000/node-utils@1.26.0':
+  '@book000/node-utils@1.26.1':
     dependencies:
       '@sentry/node': 11.10.0
       cycle: 1.0.3
