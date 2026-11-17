@@ -135,11 +135,20 @@ export class Discord {
     logger.info(`👌 ready: ${this.client.user?.tag}`)
 
     // 10分ごとにロールを同期
-    await this.sync()
+    await this.syncSafely()
     const syncInterval = setInterval(10 * 60 * 1000)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (const _ of syncInterval) {
+      await this.syncSafely()
+    }
+  }
+
+  private async syncSafely() {
+    const logger = Logger.configure('Discord.syncSafely')
+    try {
       await this.sync()
+    } catch (error: unknown) {
+      logger.error('❌ Failed to sync roles', error as Error)
     }
   }
 

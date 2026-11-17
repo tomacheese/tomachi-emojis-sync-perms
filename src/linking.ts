@@ -97,6 +97,55 @@ export class Linking {
       }
     }
 
+    this.validateElements(data as ILinking)
+
     return true
+  }
+
+  /**
+   * 配列の各要素が必要なフィールドを持つことを検証する。
+   * 最初に見つかった不備を、要素の添字を含む経路付きの例外として投げる。
+   *
+   * @param data 配列かどうかの検証を通過したリンク情報
+   */
+  private validateElements(data: ILinking): void {
+    for (const [i, role] of data.sourceGuild.roles.entries()) {
+      this.validateRole(role, `sourceGuild.roles[${i}]`)
+    }
+
+    for (const [i, guild] of data.destGuilds.entries()) {
+      const path = `destGuilds[${i}]`
+      this.assertValid(this.isObject(guild), `${path} is object`)
+      this.assertValid(
+        typeof guild.guildId === 'string',
+        `${path}.guildId is string`
+      )
+      this.assertValid(Array.isArray(guild.roles), `${path}.roles is array`)
+      for (const [j, role] of guild.roles.entries()) {
+        this.validateRole(role, `${path}.roles[${j}]`)
+      }
+    }
+  }
+
+  private validateRole(role: unknown, path: string): void {
+    this.assertValid(this.isObject(role), `${path} is object`)
+    this.assertValid(
+      typeof (role as LinkRole).type === 'string',
+      `${path}.type is string`
+    )
+    this.assertValid(
+      typeof (role as LinkRole).roleId === 'string',
+      `${path}.roleId is string`
+    )
+  }
+
+  private isObject(value: unknown): boolean {
+    return typeof value === 'object' && value !== null
+  }
+
+  private assertValid(condition: boolean, description: string): void {
+    if (!condition) {
+      throw new Error(`Linking validation failed: ${description}`)
+    }
   }
 }
