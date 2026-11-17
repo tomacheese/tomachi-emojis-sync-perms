@@ -34,6 +34,18 @@ jest.mock('discord.js', () => {
   }
 })
 
+const mockLogger = { info: jest.fn(), warn: jest.fn(), error: jest.fn() }
+jest.mock('@book000/node-utils', () => ({
+  Logger: { configure: jest.fn(() => mockLogger) },
+}))
+
+jest.mock('node:timers/promises', () => ({
+  setInterval: jest.fn(function* () {
+    yield undefined
+    yield undefined
+  }),
+}))
+
 describe('Discord', () => {
   const config: any = { get: () => ({ token: 'token' }) }
   let discord: Discord
@@ -93,7 +105,7 @@ describe('Discord', () => {
         },
       ],
     } as Linking
-    const member = {
+    const memberWithoutRole = {
       id: 'a',
       user: { tag: 'A' },
       roles: {
@@ -103,14 +115,36 @@ describe('Discord', () => {
         remove: jest.fn(),
       },
     }
+    const memberWithRole = {
+      id: 'b',
+      user: { tag: 'B' },
+      roles: {
+        cache: new Map([['1', true]]),
+        has: () => true,
+        add: jest.fn(),
+        remove: jest.fn(),
+      },
+    }
     const guild = {
       name: 'dst',
-      members: { fetch: jest.fn().mockResolvedValue(new Map([['a', member]])) },
+      members: {
+        fetch: jest.fn().mockResolvedValue(
+          new Map([
+            ['a', memberWithoutRole],
+            ['b', memberWithRole],
+          ])
+        ),
+      },
     }
     client.guilds.fetch.mockResolvedValue(guild)
     const roleUsers: RoleUsers = { admin: ['a'] }
     await discord.applyRole(linking, roleUsers)
-    expect(member.roles.add).toHaveBeenCalledWith('1')
+    expect(memberWithoutRole.roles.add).toHaveBeenCalledTimes(1)
+    expect(memberWithoutRole.roles.add).toHaveBeenCalledWith('1')
+    expect(memberWithoutRole.roles.remove).not.toHaveBeenCalled()
+    expect(memberWithRole.roles.remove).toHaveBeenCalledTimes(1)
+    expect(memberWithRole.roles.remove).toHaveBeenCalledWith('1')
+    expect(memberWithRole.roles.add).not.toHaveBeenCalled()
   })
 
   it('applyRole: 既にロールを持っている場合はaddが呼ばれない', async () => {
@@ -169,5 +203,42 @@ describe('Discord', () => {
     const roleUsers: RoleUsers = { admin: [] }
     await discord.applyRole(linking, roleUsers)
     expect(member.roles.remove).not.toHaveBeenCalled()
+  })
+
+  describe('onReady', () => {
+    const syncError = new Error('sync failed')
+
+    beforeEach(() => {
+      mockLogger.error.mockClear()
+    })
+
+    it('初回の sync が失敗しても定期 sync が実行される', async () => {
+      const sync = jest
+        .spyOn(discord, 'sync')
+        .mockRejectedValueOnce(syncError)
+        .mockResolvedValue()
+      await expect(discord.onReady()).resolves.toBeUndefined()
+      expect(sync).toHaveBeenCalledTimes(3)
+    })
+
+    it('定期 sync が失敗しても次回以降の sync が実行される', async () => {
+      const sync = jest
+        .spyOn(discord, 'sync')
+        .mockResolvedValueOnce()
+        .mockRejectedValueOnce(syncError)
+        .mockResolvedValue()
+      await expect(discord.onReady()).resolves.toBeUndefined()
+      expect(sync).toHaveBeenCalledTimes(3)
+    })
+
+    it('sync の失敗はエラーログに出力される', async () => {
+      jest.spyOn(discord, 'sync').mockRejectedValue(syncError)
+      await discord.onReady()
+      expect(mockLogger.error).toHaveBeenCalledTimes(3)
+      expect(mockLogger.error).toHaveBeenCalledWith(
+        '❌ Failed to sync roles',
+        syncError
+      )
+    })
   })
 })

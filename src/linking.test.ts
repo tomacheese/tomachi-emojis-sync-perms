@@ -40,6 +40,49 @@ describe('Linking', () => {
     expect(() => new Linking(tempPath)).toThrow()
   })
 
+  describe('要素のバリデーション', () => {
+    const cases: [string, unknown, string][] = [
+      [
+        'sourceGuild.roles の要素に type が無い',
+        { ...validData, sourceGuild: { guildId: 'src', roles: [{}] } },
+        'Linking validation failed: sourceGuild.roles[0].type is string',
+      ],
+      [
+        'destGuilds の要素に guildId が無い',
+        { ...validData, destGuilds: [{}] },
+        'Linking validation failed: destGuilds[0].guildId is string',
+      ],
+      [
+        'destGuilds の要素に roles が無い',
+        { ...validData, destGuilds: [{ guildId: 'dst' }] },
+        'Linking validation failed: destGuilds[0].roles is array',
+      ],
+      [
+        'destGuilds[].roles の要素に roleId が無い',
+        {
+          ...validData,
+          destGuilds: [{ guildId: 'dst', roles: [{ type: 'admin' }] }],
+        },
+        'Linking validation failed: destGuilds[0].roles[0].roleId is string',
+      ],
+      [
+        'destGuilds の guildId が文字列でない',
+        { ...validData, destGuilds: [{ guildId: 123, roles: [] }] },
+        'Linking validation failed: destGuilds[0].guildId is string',
+      ],
+      [
+        'destGuilds の要素が null',
+        { ...validData, destGuilds: [null] },
+        'Linking validation failed: destGuilds[0] is object',
+      ],
+    ]
+
+    it.each(cases)('%s場合に例外', (_name, data, message) => {
+      fs.writeFileSync(tempPath, yaml.dump(data))
+      expect(() => new Linking(tempPath)).toThrow(new Error(message))
+    })
+  })
+
   it('rolesやdestGuildsが空配列の場合もバリデーション成功', () => {
     const data = {
       ...validData,
