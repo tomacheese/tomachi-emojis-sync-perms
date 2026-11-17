@@ -3,6 +3,9 @@ services:
     build: .
     volumes:
       - type: bind
-        source: ./config.yml
-        target: /app/config.yml
+        source: ./data/config.json
+        target: /app/data/config.json
+      - type: bind
+        source: ./data/linking.yml
+        target: /data/linking.yml
     init: true

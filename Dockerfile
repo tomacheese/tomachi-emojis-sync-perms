@@ -28,7 +28,6 @@ COPY entrypoint.sh ./
 RUN chmod +x entrypoint.sh
 
 ENV NODE_ENV=production
-ENV CONFIG_PATH=/data/config.json
 ENV LINKING_PATH=/data/linking.yml
 
 ENTRYPOINT [ "/app/entrypoint.sh" ]
