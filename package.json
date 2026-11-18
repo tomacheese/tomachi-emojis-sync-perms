@@ -14,7 +14,6 @@
     "type": "git"
   },
   "scripts": {
-    "build": "ts-node ./src/main.ts",
     "compile": "tsc -p .",
     "compile:test": "tsc -p . --noEmit",
     "lint:prettier": "prettier --check src",
