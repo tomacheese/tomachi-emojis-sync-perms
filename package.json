@@ -33,7 +33,7 @@
     "@book000/node-utils": "1.26.45",
     "@types/jest": "30.0.0",
     "@types/js-yaml": "4.0.9",
-    "@types/node": "26.6.6",
+    "@types/node": "26.6.7",
     "discord.js": "14.28.1",
     "eslint": "10.15.0",
     "eslint-config-standard": "17.1.0",
